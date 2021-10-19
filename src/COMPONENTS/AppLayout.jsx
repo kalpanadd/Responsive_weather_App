@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -6,6 +6,7 @@ import SearchComponent from "./Search";
 import TemparatureBtn from "./TemperatureButtons";
 
 import GeoLocation from "../GeoLocationCustomHook";
+import GetTempByCity from '../API/OpenWeatherMap';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,9 +33,24 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AppLayout() {
     const classes = useStyles();
+    const [locationsearch, setLocationSearch] = useState("");
+    const [locationname, setLocationName] = useState("");
+
+
 
     const coords = GeoLocation();
     console.log(coords);
+
+    useEffect(() => {
+        GetTempByCity();
+    }, [coords.coordinates.lat])
+
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        setLocationName(locationsearch);
+        setLocationSearch("");
+    }
 
     return (
         <div className={classes.root}>
@@ -42,7 +58,11 @@ export default function AppLayout() {
                 <Grid item container spacing={1}>
                     <Grid item xs={12} sm={5} className={classes.item}>
                         <Paper className={classes.paper}>
-                            <SearchComponent />
+                            <SearchComponent location={locationsearch}
+                                setLocation={(e) => setLocationSearch(e)}
+                                handleSubmit={(e) => handleSubmit(e)}
+                                locationname={locationname}
+                            />
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={3} className={classes.item}>

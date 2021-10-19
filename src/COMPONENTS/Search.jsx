@@ -13,16 +13,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SearchComponent() {
+export default function SearchComponent({ location, setLocation, handleSubmit, locationname }) {
     const classes = useStyles();
-    const [locationsearch, setLocationSearch] = useState("");
-    const [locationname, setLocationName] = useState("");
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setLocationName(locationsearch);
-        setLocationSearch("");
-    }
 
     return (
         <form noValidate autoComplete="off" onSubmit={(e) => handleSubmit(e)}>
@@ -32,10 +25,10 @@ export default function SearchComponent() {
                 label="Search for location"
                 type="search"
                 variant="outlined"
-                value={locationsearch}
-                onChange={(e) => setLocationSearch(e.target.value)}
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
             />
-            <h1>{locationsearch ? locationsearch : locationname}</h1>
+            <h1>{location ? location : locationname}</h1>
         </form>
     );
 }
