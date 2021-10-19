@@ -56,21 +56,33 @@ export default function AppLayout() {
                 </Grid>
 
                 <Grid item container spacing={1}>
-                    <Grid item xs={12} sm={6} className={classes.item}>
-                        <Paper className={classes.paper2}>
-                            current weather pppppppppppppppppppppppppppppppppppppp
-                            jkllllllllllllllllllllllllldf
-                            dvzsssssssssssssssssssshhhhhhhhhhhhhhhhhhhhhhhhhhhhhhddcccccccccc
-                            hhhhhhddddddddddddddddddddcbhisssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-                            sjd
-                        </Paper>
-                    </Grid>
+                    {coords.coordinates.lat ?
+                        <>
+                            <Grid item xs={12} sm={6} className={classes.item}>
+                                <Paper className={classes.paper2}>
+                                    current weather pppppppppppppppppppppppppppppppppppppp
+                                    jkllllllllllllllllllllllllldf
+                                    dvzsssssssssssssssssssshhhhhhhhhhhhhhhhhhhhhhhhhhhhhhddcccccccccc
+                                    hhhhhhddddddddddddddddddddcbhisssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+                                    sjd
+                                </Paper>
+                            </Grid>
 
-                    <Grid item xs={12} sm={6} className={classes.item}>
-                        <Paper className={classes.paper} className={classes.paper2}>
-                            terrain map
-                        </Paper>
-                    </Grid>
+                            <Grid item xs={12} sm={6} className={classes.item}>
+                                <Paper className={classes.paper} className={classes.paper2}>
+                                    terrain map
+                                </Paper>
+                            </Grid>
+                        </>
+                        :
+                        <Grid item xs={12} className={classes.item}
+                            container
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <h1>{coords.error}</h1>
+                        </Grid>}
                 </Grid>
 
                 <Grid item container spacing={1}>
