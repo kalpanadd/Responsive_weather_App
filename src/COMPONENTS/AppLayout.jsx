@@ -50,10 +50,13 @@ export default function AppLayout() {
     }, [coords.coordinates.lat])
 
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
         setLocationName(locationsearch);
+        const response = await GetTempByCity(locationsearch)
         setLocationSearch("");
+        // console.log("on submit" + res.data);
+        setResult(response.data);
     }
 
     return (
