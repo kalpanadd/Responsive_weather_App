@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+
 import SearchComponent from "./Search";
 import TemparatureBtn from "./TemperatureButtons";
-
+import ForecastDays from './ForecastDays';
 import GeoLocation from "../GeoLocationCustomHook";
-import { GetTempByCity, GetTempByCoords } from '../API/OpenWeatherMap';
+import { GetTempByCity, GetTempByCoords, GetForecast } from '../API/OpenWeatherMap';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,7 +29,10 @@ const useStyles = makeStyles((theme) => ({
     },
     item: {
         backgroundColor: "pink"
-    }
+    },
+    button: {
+        margin: theme.spacing(1),
+    },
 }));
 
 export default function AppLayout() {
@@ -54,9 +58,15 @@ export default function AppLayout() {
         e.preventDefault();
         setLocationName(locationsearch);
         const response = await GetTempByCity(locationsearch)
+        console.log("current" + response);
         setLocationSearch("");
-        // console.log("on submit" + res.data);
+        if (response.data) {
+            const forecast = await GetForecast(response.data.coord.lat, response.data.coord.lon, unit)
+            console.log("forecast" + forecast.data);
+        }
         setResult(response.data);
+
+
     }
 
     return (
@@ -81,6 +91,7 @@ export default function AppLayout() {
                     <Grid item xs={12} sm={4} className={classes.item}>
                         <Paper className={classes.paper}>
                             <TemparatureBtn />
+
                         </Paper>
                     </Grid>
                 </Grid>
@@ -123,11 +134,15 @@ export default function AppLayout() {
 
                 <Grid item container spacing={1}>
                     <Grid item xs={12} className={classes.item}>
-                        <Paper className={classes.paper}>10days forecast heading</Paper>
+                        <Paper className={classes.paper}>
+                            <ForecastDays />
+                        </Paper>
                     </Grid>
 
                     <Grid item xs={12} className={classes.item}>
-                        <Paper className={classes.paper}>10days forecast components</Paper>
+                        <Paper className={classes.paper}>
+
+                        </Paper>
                     </Grid>
                 </Grid>
 
@@ -142,6 +157,6 @@ export default function AppLayout() {
                     </Grid>
                 </Grid>
             </Grid>
-        </div>
+        </div >
     );
 }
