@@ -41,6 +41,7 @@ export default function AppLayout() {
     const [locationname, setLocationName] = useState("");
     const [result, setResult] = useState();
     const [unit, setUnit] = useState("metric");
+    const [forecast, setForecast] = useState("");
 
     const coords = GeoLocation();
     console.log(coords);
@@ -57,16 +58,15 @@ export default function AppLayout() {
     async function handleSubmit(e) {
         e.preventDefault();
         setLocationName(locationsearch);
-        const response = await GetTempByCity(locationsearch)
+        const response = await GetTempByCity(locationsearch, unit)
         console.log("current" + response);
         setLocationSearch("");
         if (response.data) {
             const forecast = await GetForecast(response.data.coord.lat, response.data.coord.lon, unit)
-            console.log("forecast" + forecast.data);
+            console.log(forecast.data);
+            setForecast(forecast.data);
         }
         setResult(response.data);
-
-
     }
 
     return (
@@ -106,8 +106,8 @@ export default function AppLayout() {
                                         <h4>{result.weather[0].description}</h4>
                                         <img src={`http://openweathermap.org/img/wn/${result.weather[0].icon}@2x.png`} alt="clouds" />
                                     </Grid>
-                                    <h3>Max Temp:{result.main.temp_max}</h3>
-                                    <h3>Min Temp:{result.main.temp_min}</h3>
+                                    <h3>Max Temp:{result.main.temp_max}{unit === "metric" ? "℃" : "℉"}</h3>
+                                    <h3>Min Temp:{result.main.temp_min}{unit === "metric" ? "℃" : "℉"}</h3>
                                     <Grid item container alignItems="center" justifyContent="space-evenly">
                                         <h4>feels like:{result.main.feels_like}</h4>
                                         <h4>humidity:{result.main.humidity}</h4>
@@ -132,16 +132,11 @@ export default function AppLayout() {
                         </Grid>}
                 </Grid>
 
-                <Grid item container spacing={1}>
-                    <Grid item xs={12} className={classes.item}>
-                        <Paper className={classes.paper}>
-                            <ForecastDays />
-                        </Paper>
-                    </Grid>
+                <Grid item container spacing={1} direction="row" alignItems="center" justifyContent="flex-start">
+                    <Grid item xs={12} className={classes.item} >
+                        <Paper className={classes.paper} className={classes.paper2}>
 
-                    <Grid item xs={12} className={classes.item}>
-                        <Paper className={classes.paper}>
-
+                            {forecast.daily ? <ForecastDays daily={forecast.daily} hourly={forecast.hourly} /> : ""}
                         </Paper>
                     </Grid>
                 </Grid>
